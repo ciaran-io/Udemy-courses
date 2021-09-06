@@ -11,6 +11,9 @@ const app = Vue.createApp({
     reduceCounter: function(){
       if(this.counter >=1)
       this.counter--;
+    },
+    reduceCounterBY(ammount){
+      this.counter = this.counter - ammount
     }
   }
 });

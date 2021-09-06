@@ -22,6 +22,8 @@
       <button @click="reduceCounter()">Reduce</button>
       <button @click="reduceCounterBY(10)">Reduce By 5</button>
       <p>Result: {{ counter }}</p>
+        <input type="text" v-on:input="setName($event, 'Toner')">
+        <p>Your Name: {{ name}}</p>
     </section>
   </body>
 </html>

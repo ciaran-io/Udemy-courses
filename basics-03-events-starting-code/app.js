@@ -1,6 +1,7 @@
 const app = Vue.createApp({
   data() {
     return {
+      name: '',
       counter: 0,
     };
   },
@@ -14,6 +15,9 @@ const app = Vue.createApp({
     },
     reduceCounterBY(ammount){
       this.counter = this.counter - ammount
+    },
+    setName: function(event, lastName){
+      this.name = event.target.value + ' ' + lastName;
     }
   }
 });

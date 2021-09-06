@@ -1,7 +1,7 @@
 const app = Vue.createApp({
   data() {
     return {
-      counter: 0,
+      counter: 10,
     };
   },
   methods: {
@@ -14,6 +14,9 @@ const app = Vue.createApp({
     },
     reduceCounterBY(ammount){
       this.counter = this.counter - ammount
+    },
+    submitForm: function(){
+      alert('Please enter Name')
     }
   }
 });

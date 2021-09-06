@@ -18,10 +18,15 @@
     </header>
     <section id="events">
       <h2>Events in Action</h2>
-      <button @click="addCounter()">Add</button>
-      <button @click="reduceCounter()">Reduce</button>
-      <button @click="reduceCounterBY(10)">Reduce By 5</button>
+      <button @click="addCounter()">Add 1</button>
+        <!-- modifier added. on right click method is called -->
+      <button @click.right="reduceCounter()">subtract 1</button>
+      <button @click="reduceCounterBY(10)">Subtrct 5</button>
       <p>Result: {{ counter }}</p>
+      <form v-on:submit.prevent="submitForm">
+        <input type="text">
+        <input type="submit" value="Sign Up">
+      </form>
     </section>
   </body>
 </html>

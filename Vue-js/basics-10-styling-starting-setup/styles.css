@@ -29,8 +29,12 @@ header {
 }
 
 .demo {
-  width: calc(100% - 32px);
+  width: calc(100% - 42px);
   height: 100px;
   margin: 16px;
   border: 2px dashed #ccc;
+}
+
+.active {
+  background-color: red;
 }

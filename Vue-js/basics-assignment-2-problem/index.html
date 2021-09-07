@@ -28,6 +28,11 @@
       <!-- 3) Repeat 2) but only output the entered value if the ENTER key was pressed -->
       <input type="text"  v-on:keyup.enter="confirmUserInput" />
       <p >OUTPUT {{confirmedName}}</p>
+      <div>
+        <button @click="add(45)">Add 5</button>
+        <button @click="subtract(5)">Subtract 5</button>
+        <p>{{ counter }}</p>
+      </div>
     </section>
   </body>
 </html>

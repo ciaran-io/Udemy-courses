@@ -4,9 +4,22 @@
       <h1>My Friends</h1>
     </header>
     <ul>
-      <friend-contact></friend-contact>
-      <friend-contact></friend-contact>
+      <friend-contact v-for="friend in friends" 
+        :key="friend.id"
+        :name="friend.name"
+        :id="friend.id"
+        :phone-number="friend.phone"
+        :email-address="friend.email"
+        @delete-friend="deleteFriend"
+      >
+      </friend-contact>
     </ul>
+    <div>
+      <friend-contact-form
+        @add-friend="addFriend"
+      >
+        </friend-contact-form>
+    </div>
   </section>
 </template>
 
@@ -30,6 +43,21 @@ export default {
       ],
     };
   },
+  methods: {
+    addFriend(name, phone, email){
+      const newFriendContact = {
+        id: new Date().toISOString(),
+        name: name,
+        phone: phone,
+        email: email
+      };
+      this.friends.push(newFriendContact)
+    },
+    deleteFriend(friendId){
+      console.log(this.friends, friendId)
+      this.friends = this.friends.filter(friend => friend.id !== friendId)
+    }
+  }
 };
 </script>
 

@@ -54,8 +54,8 @@ export default {
       this.friends.push(newFriendContact)
     },
     deleteFriend(friendId){
-      console.log(this.friends, friendId)
-      this.friends = this.friends.filter(friend => friend.id !== friendId)
+      console.log(this.friends, friendId )
+      this.friends = this.friends.filter(friend => friend.id !== friendId )
     }
   }
 };

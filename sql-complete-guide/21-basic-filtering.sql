@@ -1,0 +1,1 @@
+SELECT * FROM sales WHERE tatal_sales > 500;

@@ -1,0 +1,15 @@
+{
+	"name": "node-farm",
+	"version": "1.0.0",
+	"description": "A node-js starter project",
+	"main": "index.js",
+	"scripts": {
+		"start": "nodemon index.js"
+	},
+	"author": "Ciaran Toner",
+	"license": "ISC",
+	"dependencies": {
+		"nodemon": "^2.0.15",
+		"slugify": "^1.6.5"
+	}
+}

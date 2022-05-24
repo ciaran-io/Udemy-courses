@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+
 // const validator = require('validator');
 
 const tourSchema = new mongoose.Schema(
@@ -26,6 +27,12 @@ const tourSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'A tour must have a duration'],
     },
+    guides: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+      },
+    ],
     images: [String],
     imageCover: {
       type: String,
@@ -46,6 +53,19 @@ const tourSchema = new mongoose.Schema(
       ],
       // validate: [validator.isAlpha, 'Tour name must only contain characters'],
     },
+    locations: [
+      {
+        type: {
+          type: String,
+          default: 'Point',
+          enum: 'Point',
+        },
+        coordinantes: [Number],
+        address: String,
+        description: String,
+        day: Number,
+      },
+    ],
     maxGroupSize: {
       type: Number,
       required: [true, 'A tour must have a group size'],
@@ -80,6 +100,17 @@ const tourSchema = new mongoose.Schema(
       default: false,
     },
     startDates: [Date],
+    startLocation: {
+      // GeoJSON
+      type: {
+        type: String,
+        default: 'Point',
+        enum: ['Point'],
+      },
+      coordinantes: [Number],
+      address: String,
+      description: String,
+    },
     slug: String,
     summary: {
       type: String,
@@ -96,21 +127,30 @@ const tourSchema = new mongoose.Schema(
 tourSchema.virtual('durationOfWeeks').get(function () {
   return this.duration / 7;
 });
+
+// Virtual populate
+tourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour',
+  localField: '_id',
+});
+
 // DOCUMENT MIDDLEWARE: runs bedore .save() and .create()
 tourSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
   next();
 });
 
+// tourSchema.pre('save', async function (next) {
+//   const guidesPromise = this.guides.map(async (id) => await User.findById(id));
+//   this.guides = await Promise.all(guidesPromise);
+
+//   next();
+// });
+
 tourSchema.pre(/^find/, function (next) {
   this.find({ secretTours: { $ne: true } });
   this.start = Date.now();
-  next();
-});
-
-tourSchema.post(/^find/, function (docs, next) {
-  console.log(`Query took ${Date.now() - this.start} milliseconds!`);
-  console.log(docs);
   next();
 });
 
@@ -120,6 +160,22 @@ tourSchema.pre('aggregate', function (next) {
   console.log(this.pipeline());
   next();
 });
+
+tourSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'guides',
+    select: '-__V -passwordChangedAt ',
+  });
+
+  next();
+});
+
+tourSchema.post(/^find/, function (docs, next) {
+  console.log(`Query took ${Date.now() - this.start} milliseconds!`);
+  console.log(docs);
+  next();
+});
+
 // // tourSchema.pre('save', (next) => {
 //   console.log('will save document');
 //   next();

@@ -1,7 +1,7 @@
 const Tour = require('../models/tourModel');
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
-// const AppErrpor = require('../utils/appError');
+const AppErrpor = require('../utils/appError');
 
 exports.aliasTopFiveCheapTours = (req, res, next) => {
   req.query.limit = '5';
@@ -43,7 +43,7 @@ exports.getTourStats = catchAsync(async (req, res, next) => {
       $group: {
         _id: '$difficulty',
         numTours: { $sum: 1 },
-        numRatings: { $sum: '$ratingsQuantitiy' },
+        numRatings: { $sum: '$ratingsQuantity' },
         averageRating: { $avg: '$ratingsAverage' },
         avgPrice: { $avg: '$price' },
         minPrice: { $avg: '$price' },
@@ -67,8 +67,7 @@ exports.getTourStats = catchAsync(async (req, res, next) => {
 });
 
 exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
-  const year = req.params.year * 1; // not working req.params returns empty object
-  // const year = new Date().getFullYear();
+  const year = req.params.year * 1;
   const plan = await Tour.aggregate([
     {
       $unwind: '$startDates',
@@ -106,6 +105,34 @@ exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
     status: 'success',
     data: {
       plan,
+    },
+  });
+});
+
+exports.getToursWithin = catchAsync(async (req, res, next) => {
+  const { distance, latlng, unit } = req.params;
+  const [lat, lng] = latlng.split(',');
+  // radius or earth in miles or km
+  const radius = unit === 'mi' ? distance / 3963.2 : distance / 6378.1;
+
+  if (!lat || !lng) {
+    next(
+      new AppErrpor(
+        'Please provide latitude and longitude in the correct format: lat, lng ',
+        400
+      )
+    );
+  }
+
+  const tours = await Tour.find({
+    startLocation: { $geoWithin: { $centerSphere: [[lng, lat], radius] } },
+  });
+
+  res.status(200).json({
+    status: 200,
+    results: tours.length,
+    data: {
+      data: tours,
     },
   });
 });

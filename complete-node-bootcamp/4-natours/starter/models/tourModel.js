@@ -58,9 +58,9 @@ const tourSchema = new mongoose.Schema(
         type: {
           type: String,
           default: 'Point',
-          enum: 'Point',
+          enum: ['Point'],
         },
-        coordinantes: [Number],
+        coordinates: [Number],
         address: String,
         description: String,
         day: Number,
@@ -90,8 +90,10 @@ const tourSchema = new mongoose.Schema(
       default: 4.5,
       min: [1, 'Rating must be above 1.0'],
       max: [5, 'Rating must be below 5.0'],
+      // round ratings
+      set: (val) => Math.round(val * 10) / 10,
     },
-    ratingsQuantitiy: {
+    ratingsQuantity: {
       type: Number,
       default: 0,
     },
@@ -107,7 +109,7 @@ const tourSchema = new mongoose.Schema(
         default: 'Point',
         enum: ['Point'],
       },
-      coordinantes: [Number],
+      coordinates: [Number],
       address: String,
       description: String,
     },
@@ -123,6 +125,13 @@ const tourSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
+
+// tourSchema.index({ price: 1 });
+// compound index, increases read speed query to DB
+tourSchema.index({ price: 1, ratingsAverage: -1 });
+tourSchema.index({ slug: 1 });
+// start location index in 2d sphere
+tourSchema.index({ startLocation: '2dsphere' });
 
 tourSchema.virtual('durationOfWeeks').get(function () {
   return this.duration / 7;

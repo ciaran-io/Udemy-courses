@@ -15,7 +15,8 @@ const reviewRouter = require('./routes/reviewRoutes');
 const app = express();
 // Globas Middileware
 // Set security HTTP header
-app.use(helmet());
+// Sets "Cross-Origin-Resource-Policy: same-site"
+app.use(helmet.crossOriginResourcePolicy({ policy: 'same-site' }));
 
 // Development logging
 if (process.env.NODE_ENV === 'development') {

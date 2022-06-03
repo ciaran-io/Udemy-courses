@@ -6,10 +6,18 @@
   "engines": {
     "node": ">=14.0.0"
   },
+  "targets": {
+    "main": false,
+    "default": {
+      "distDir": "./public/js/bundle"
+    }
+  },
   "scripts": {
     "start:dev": "nodemon ./server.js",
-    "start:prod": "NODE_ENV=production nodemon ./server.js",
-    "debug": "ndb node.js"
+    "start:prod": "NODE_ENV=production nodemon server.js",
+    "debug": "ndb node.js",
+    "watch:js": "parcel watch ./public/js/index.js",
+    "build:js": "parcel build ./public/js/index.js --dist-dir ./public/js/bundle.js"
   },
   "keywords": [
     "node.js",
@@ -19,7 +27,9 @@
   "author": "Ciaran Toner",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.27.2",
     "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "express-mongo-sanitize": "^2.2.0",
@@ -27,24 +37,26 @@
     "helmet": "^5.1.0",
     "hpp": "^0.2.3",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.3.3",
+    "mongoose": "^6.3.5",
     "morgan": "^1.10.0",
     "nodemailer": "^6.7.5",
+    "pug": "^3.0.2",
     "slugify": "^1.6.5",
     "validator": "^13.7.0",
     "xss-clean": "^0.1.1"
   },
   "devDependencies": {
-    "eslint": "^8.15.0",
+    "eslint": "^8.16.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react": "^7.29.4",
+    "eslint-plugin-react": "^7.30.0",
     "eslint-plugin-react-hooks": "^4.5.0",
     "nodemon": "^2.0.16",
+    "parcel": "^2.6.0",
     "prettier": "^2.6.2"
   }
 }

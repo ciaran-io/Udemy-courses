@@ -23,7 +23,11 @@ router.get(
   userController.getUserProfile,
   userController.getUser
 );
-router.patch('/updateMe', userController.updateMe);
+router.patch(
+  '/updateMe',
+  userController.uploadUserPhoto,
+  userController.updateMe
+);
 router.delete('/deleteMe', userController.deleteMe);
 
 // Restrict all routes after authController middleware is called

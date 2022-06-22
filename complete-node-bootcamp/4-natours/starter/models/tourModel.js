@@ -179,22 +179,6 @@ tourSchema.pre(/^find/, function (next) {
   next();
 });
 
-tourSchema.post(/^find/, function (docs, next) {
-  console.log(`Query took ${Date.now() - this.start} milliseconds!`);
-  console.log(docs);
-  next();
-});
-
-// // tourSchema.pre('save', (next) => {
-//   console.log('will save document');
-//   next();
-// });
-
-// tourSchema.post('save', (doc, next) => {
-//   console.log(doc);
-//   next();
-// });
-
 const Tour = mongoose.model('Tour', tourSchema);
 
 module.exports = Tour;

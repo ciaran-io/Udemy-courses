@@ -2,13 +2,14 @@
 import { displayMap } from './mapbox';
 import { login, logout } from './login';
 import { updateSettings } from './updateSettings';
-
+import { bookTour } from './stripe'
 // DOM Elements
 const mapBox = document.getElementById('map');
 const loginForm = document.querySelector('form.form-login');
 const logOutBtn = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
 const userDataPassword = document.querySelector('.form-user-password');
+const bookBtn = document.querySelector('#book-tour')
 
 // Delegation
 if (mapBox) {
@@ -31,21 +32,24 @@ if (logOutBtn) logOutBtn.addEventListener('click', logout);
 if (userDataForm) {
   userDataForm.addEventListener('submit', (event) => {
     event.preventDefault();
-
-    const name = document.querySelector('input[name="name"]').value;
-    const email = document.querySelector('input[name="email"]').value;
-    updateSettings({ name, email }, 'data');
+    const form = new FormData();
+    form.append('name', document.querySelector('input[name="name"]').value);
+    form.append('email', document.querySelector('input[name="email"]').value);
+    form.append(
+      'photo',
+      document.querySelector('input[name="photo"]').files[0]
+    );
+    updateSettings(form, 'data');
   });
 }
 
 if (userDataPassword) {
   userDataPassword.addEventListener('submit', async (event) => {
-    event.preventDefault()
-    
-    const savePasswordBtn =userDataPassword.querySelector('button') ;
+    event.preventDefault();
 
-    savePasswordBtn.textContent ='Updating...'
+    const savePasswordBtn = userDataPassword.querySelector('button');
 
+    savePasswordBtn.textContent = 'Updating...';
 
     const passwordCurrent = document.querySelector(
       'input#password-current'
@@ -59,12 +63,20 @@ if (userDataPassword) {
       { passwordCurrent, password, passwordConfirm },
       'password'
     );
-    
-    savePasswordBtn.textContent = 'save password'
+
+    savePasswordBtn.textContent = 'save password';
     const passwordInputs = userDataPassword.querySelectorAll(
       'input[type="password"]'
     );
     // reset current password input
     passwordInputs.forEach((el) => (el.value = ''));
   });
+}
+
+if (bookBtn) {
+  bookBtn.addEventListener('click', event => {
+    event.target.textContent = 'Processing'
+    const { tourId } = event.target.dataset;
+    bookTour(tourId)
+  })
 }

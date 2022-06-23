@@ -8,6 +8,7 @@ const hpp = require('hpp');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
+const cors = require('cors');
 
 // const bodyParser = require('body-parser');
 
@@ -25,8 +26,12 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
 // Globas Middileware
-// Set security HTTP header
-// app.use(helmet());
+
+// Implement Cors
+app.use(cors()); // Access-Control-Allow-Origin
+
+app.options('*', cors());
+
 // Sets "Cross-Origin-Resource-Policy: same-site"
 app.use(helmet.crossOriginResourcePolicy({ policy: 'same-site' }));
 
